@@ -67,3 +67,18 @@ O instalador verifica o Microsoft WebView2 Runtime e instala o bootstrapper ofic
 O principal inicia o servidor e a interface no mesmo processo, com uma única janela. O menu **Programa** reúne atualização, informações da rede e backup completo (exige login de administrador). Ao fechar a janela do principal, a rede deixa de atender até reabrir. Nos clientes, o endereço já salvo abre diretamente a janela de trabalho; para mudar o IP, use **Configurar rede do Universal OS** no menu Iniciar.
 
 **Minha senha** permite trocar a senha atual. Em **Configurações → Equipe**, o administrador redefine senhas de outros usuários. Em **Configurações → Recuperação da sua senha**, cada administrador pode gerar seu próprio código, confirmando a senha atual. Guarde-o em local privado: ele só aparece ao gerar, e cada novo código invalida o anterior. No login, **Esqueci minha senha** aceita usuário, código e nova senha. O código é consumido após o uso e encerra as sessões anteriores desse administrador; gere outro após entrar novamente. O banco guarda apenas o hash do código e os registros de auditoria não contêm o código. Sem código guardado, peça a outro administrador para redefinir sua senha.
+
+
+NOVIDADES 1.14 — ENDEREÇO COPIÁVEL E BACKUP DIÁRIO
+Menu Programa > Informações da rede: endereço selecionável, Ctrl+C e botão Copiar endereço.
+No principal, entre como administrador e use Programa > Backup automático — Google Drive.
+Escolha uma pasta já sincronizada pelo Google Drive para computador, marque Ativar e salve.
+O horário inicial é 17:30, no relógio deste computador, e pode ser alterado.
+O backup inclui todas as OS, numeração, usuários e senhas protegidas, usando cópia consistente do SQLite.
+Mantenha o principal e o Universal OS abertos. Ao abrir depois do horário, será feita a cópia pendente do dia.
+Cada instalação mantém uma subpasta própria e as últimas 30 cópias automáticas. Backups manuais ficam separados.
+A cópia é verificada antes de ser concluída. Se a pasta estiver indisponível, tenta novamente em cinco minutos.
+A tela mostra a última cópia criada e eventuais falhas. Fazer backup agora permite conferir o destino.
+O programa confirma a criação local do arquivo; o envio à nuvem depende do Google Drive conectado e sincronizando.
+O backup começa desativado até você escolher a pasta e salvar a configuração no computador principal.
+Não é preciso configurar nos PCs clientes. A atualização preserva o banco e as configurações existentes.

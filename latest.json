@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "app": "universal-os",
-  "version": "1.13.0",
-  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.13.0/Instalar-Universal-OS-1.13.exe",
-  "sha256": "7542e0757bbadaa752ee480de3a6f8e25ca9d1a65710054240c622e18eafa8c8",
-  "size": 24454871,
-  "notes": "Uma única janela, menu Programa e recuperação de senha com código. Salve as OS antes de instalar. Mantenha a janela do principal aberta para atender a rede."
+  "version": "1.14.0",
+  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.14.0/Instalar-Universal-OS-1.14.exe",
+  "sha256": "ee76928e3054c24172b4e447da8ccf805c91fc33971e8c45c1b0197b5ec3db82",
+  "size": 24484304,
+  "notes": "Endereço copiável e backup diário às 17h30. Para ativar, escolha a pasta sincronizada em Programa > Backup automático — Google Drive. Salve as OS antes de instalar."
 }

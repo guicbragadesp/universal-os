@@ -10,6 +10,8 @@ import threading
 import urllib.request
 from urllib.parse import urlsplit
 import updater
+from backup_scheduler import BackupScheduler
+from native_dialogs import network_dialog, backup_dialog
 
 class NativeTools:
     def __init__(self, data, is_server, url):
@@ -19,6 +21,7 @@ class NativeTools:
         self.window = None
         self.stopped = threading.Event()
         self.lock = threading.Lock()
+        self.scheduler = BackupScheduler(self.data, self.stopped) if is_server else None
 
     def menu(self):
         from webview.menu import Menu, MenuAction
@@ -26,6 +29,7 @@ class NativeTools:
                  MenuAction('Informações da rede', self.network)]
         if self.is_server:
             items.append(MenuAction('Fazer cópia de segurança', self.backup))
+            items.append(MenuAction('Backup automático — Google Drive', self.configure_backup))
         items.append(MenuAction('Sobre o Universal OS', lambda: self.info('Universal OS', 'Versão ' + updater.VERSION + '\n\nUse Minha senha para trocar a senha. O administrador redefine acessos em Configurações.')))
         return [Menu('Programa', items)]
 
@@ -36,6 +40,8 @@ class NativeTools:
         self.window = window
         window.events.closed += self.stopped.set
         threading.Thread(target=self.periodic, daemon=True).start()
+        if self.scheduler:
+            self.scheduler.start()
 
     def periodic(self):
         if self.stopped.wait(4):
@@ -55,13 +61,16 @@ class NativeTools:
                         addresses.append(address)
             except OSError:
                 pass
-            message = 'Endereço para os outros computadores:\n\n' + '\n'.join('http://' + a + ':8765/' for a in addresses)
-            if not addresses:
-                message += '\nConecte o computador à rede do escritório.'
-            message += '\n\nMantenha esta janela aberta e o computador ligado para atender a rede.'
+            network_dialog(['http://' + address + ':8765/' for address in addresses], True)
         else:
-            message = 'Computador principal configurado:\n\n' + self.url + '\n\nPara mudar o endereço, use o atalho Configurar rede do Universal OS no menu Iniciar.'
-        self.info('Rede do Universal OS', message)
+            network_dialog([self.url], False)
+
+    def configure_backup(self):
+        try:
+            self.administrator()
+            backup_dialog(self.scheduler, self.administrator)
+        except Exception as error:
+            self.info('Backup automático', str(error))
 
     def administrator(self):
         pairs = []
