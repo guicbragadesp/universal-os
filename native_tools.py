@@ -10,6 +10,8 @@ import threading
 import urllib.request
 from urllib.parse import urlsplit
 import updater
+import server
+from restore_backup import recover
 from backup_scheduler import BackupScheduler
 from native_dialogs import network_dialog, backup_dialog
 
@@ -30,6 +32,7 @@ class NativeTools:
         if self.is_server:
             items.append(MenuAction('Fazer cópia de segurança', self.backup))
             items.append(MenuAction('Backup automático — Google Drive', self.configure_backup))
+            items.append(MenuAction('Recuperar backup', self.restore))
         items.append(MenuAction('Sobre o Universal OS', lambda: self.info('Universal OS', 'Versão ' + updater.VERSION + '\n\nUse Minha senha para trocar a senha. O administrador redefine acessos em Configurações.')))
         return [Menu('Programa', items)]
 
@@ -94,18 +97,48 @@ class NativeTools:
                 return
             folder = Path(selected[0])
             target = folder / ('Universal-OS-' + datetime.datetime.now().strftime('%Y%m%d-%H%M%S-%f') + '.sqlite3')
-            source = sqlite3.connect(self.data / 'universal.sqlite3', timeout=30)
-            output = sqlite3.connect(target)
-            try:
-                source.backup(output)
-                if output.execute('PRAGMA integrity_check').fetchone()[0] != 'ok':
-                    raise ValueError('Falha ao conferir o backup.')
-            finally:
-                source.close()
-                output.close()
+            with server.DATABASE_LOCK:
+                source = sqlite3.connect(self.data / 'universal.sqlite3', timeout=30)
+                output = sqlite3.connect(target)
+                try:
+                    source.backup(output)
+                    if output.execute('PRAGMA integrity_check').fetchone()[0] != 'ok':
+                        raise ValueError('Falha ao conferir o backup.')
+                finally:
+                    source.close()
+                    output.close()
             self.info('Backup concluído', 'Cópia salva em:\n' + str(target))
         except Exception as error:
             self.info('Cópia de segurança', str(error))
+
+    def restore(self):
+        if not self.is_server or not self.lock.acquire(blocking=False):
+            return
+        try:
+            def authorize():
+                with server.connect() as c:
+                    fresh = c.execute('SELECT COUNT(*) FROM users').fetchone()[0] == 0
+                if not fresh:
+                    self.administrator()
+            authorize()
+            import webview
+            selected = self.window.create_file_dialog(webview.FileDialog.OPEN,
+                allow_multiple=False, file_types=('Backup Universal OS (*.sqlite3)',))
+            if not selected:
+                return
+            def confirm(info):
+                return self.window.create_confirmation_dialog('Recuperar backup completo',
+                    'Este backup contém ' + str(info['orders']) + ' OS. Próximo número: ' + str(info['next_number']) +
+                    '.\n\nA recuperação SUBSTITUI todos os registros, usuários e senhas deste servidor. Não junta duas bases.\n\nPeça à equipe para salvar e parar de usar o programa. Uma cópia dos dados atuais será guardada antes da recuperação. Depois, todos precisarão entrar com os usuários e senhas do backup.\n\nDeseja recuperar este backup agora?')
+            with self.scheduler.lock:
+                result = recover(selected[0], authorize, confirm)
+            if result:
+                self.info('Backup recuperado', 'Foram recuperadas ' + str(result['orders']) + ' OS.\n\nEntre com o usuário e a senha que existiam no backup.\n\nCópia dos dados anteriores:\n' + result['safety'])
+                self.window.load_url(self.url)
+        except Exception as error:
+            self.info('Não foi possível recuperar', str(error)[:700])
+        finally:
+            self.lock.release()
 
     def check(self, manual=False):
         if not self.lock.acquire(blocking=False):

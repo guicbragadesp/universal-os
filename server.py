@@ -13,12 +13,14 @@ import re
 import secrets
 import sqlite3
 import time
+import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit
 
 ROOT = Path(__file__).resolve().parent
 DATA = Path(os.environ.get('OS_DATA_DIR', str(ROOT / 'data'))).resolve()
 DB = DATA / 'universal.sqlite3'
+DATABASE_LOCK = threading.RLock()
 HTTPS = os.environ.get('OS_HTTPS', '0') == '1'
 SETUP_TOKEN = os.environ.get('OS_SETUP_TOKEN') or secrets.token_urlsafe(24)
 DEFAULTS = ['TRANSFERÊNCIA', 'LICENCIAMENTO', 'IPVA', 'SEGURO', 'PLACA MERCOSUL', 'LAUDO DE VISTORIA', 'HONORÁRIO']
@@ -27,19 +29,20 @@ def now():
     return dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds')
 
 @contextmanager
-def connect():
-    c = sqlite3.connect(DB, timeout=30)
-    c.row_factory = sqlite3.Row
-    c.execute('PRAGMA foreign_keys=ON')
-    try:
-        with c:
-            yield c
-    finally:
-        c.close()
+def connect(database=None):
+    with DATABASE_LOCK:
+        c = sqlite3.connect(database or DB, timeout=30)
+        c.row_factory = sqlite3.Row
+        c.execute('PRAGMA foreign_keys=ON')
+        try:
+            with c:
+                yield c
+        finally:
+            c.close()
 
-def initialize():
+def initialize(database=None):
     DATA.mkdir(parents=True, exist_ok=True)
-    with connect() as c:
+    with connect(database) as c:
         c.execute('PRAGMA journal_mode=WAL')
         c.executescript('''
         CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, username TEXT UNIQUE NOT NULL,

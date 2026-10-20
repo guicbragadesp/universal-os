@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "app": "universal-os",
-  "version": "1.15.0",
-  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.15.0/Instalar-Universal-OS-1.15.exe",
-  "sha256": "4c06c60d6e84aeb083e07e89e4ca2aa906b5f3f3cf24d018cf56097ffd3d71d5",
-  "size": 24488143,
-  "notes": "Conferência de recebimento exclusiva da gerência, com responsável, data e histórico. O carimbo PAGO permanece independente. Alterações em valores ou serviços exigem nova conferência. Salve as OS antes de instalar."
+  "version": "1.16.0",
+  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.16.0/Instalar-Universal-OS-1.16.exe",
+  "sha256": "cc470e9adbed76504ad7cde0bd701939ecefc7d3667ef8efd6d28558d8076b77",
+  "size": 24493735,
+  "notes": "Novo botão Programa > Recuperar backup no computador principal. Selecione o backup completo .sqlite3, confira a quantidade de OS e confirme. Cria uma cópia dos dados atuais antes de substituir a base. Salve as OS antes de instalar."
 }

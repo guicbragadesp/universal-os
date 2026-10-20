@@ -89,3 +89,13 @@ Não é preciso configurar nos PCs clientes. A atualização preserva o banco e 
 O carimbo PAGO continua independente da conferência. Quando o pagamento cobre o total, a OS fica aguardando conferência. Somente um administrador pode marcar que verificou a entrada do dinheiro e confirmar o recebimento. O sistema registra nome, data e horário no histórico. A gerência também pode reabrir a conferência.
 
 Na lista de OS, o administrador pode filtrar as conferências pendentes. Alterar valores ou serviços cancela a confirmação anterior e exige nova conferência; alterar apenas observações a mantém. Registros antigos não são aprovados automaticamente. Essa conferência é manual: não existe consulta automática à conta bancária.
+
+
+RECUPERAR BACKUP — VERSÃO 1.16
+No computador principal: Programa > Recuperar backup. Entre como administrador.
+Em uma instalação nova, sem usuários, a recuperação pode ser feita antes de criar o primeiro acesso.
+Selecione o backup completo .sqlite3 mais recente, por exemplo UniversalOS-auto-20261020-173000-123456.sqlite3 ou Universal-OS-20261020-173000-123456.sqlite3. Não selecione a pasta nem a exportação JSON.
+Confira a quantidade de OS e o próximo número apresentados. Peça à equipe para salvar e parar de usar o sistema antes de confirmar.
+A recuperação substitui a base inteira; não junta registros de dois computadores. O arquivo é conferido antes da confirmação. Uma cópia consistente da base atual fica em %LOCALAPPDATA%\UniversalOS\data\backups-antes-recuperacao.
+Após recuperar, todos devem entrar novamente com os usuários e senhas que estavam no backup. Os registros posteriores à data do backup não estarão na base recuperada.
+No novo servidor, configure novamente o backup automático e informe seu endereço nos computadores clientes. O Google Drive deve terminar a sincronização ou o download do arquivo antes da recuperação.

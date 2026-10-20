@@ -91,6 +91,11 @@ class BackupScheduler:
             return self._snapshot(dt.datetime.now(), scheduled=False)
 
     def _snapshot(self, now, scheduled):
+        import server
+        with server.DATABASE_LOCK:
+            return self._snapshot_locked(now, scheduled)
+
+    def _snapshot_locked(self, now, scheduled):
         if not self.config['folder']:
             raise ValueError('Escolha primeiro a pasta sincronizada do Google Drive.')
         base = Path(self.config['folder']).resolve(strict=True)
