@@ -59,6 +59,8 @@ def initialize():
         CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY, order_id INTEGER REFERENCES orders(id),
           actor INTEGER REFERENCES users(id), action TEXT NOT NULL, at TEXT NOT NULL, snapshot TEXT NOT NULL);
         CREATE TABLE IF NOT EXISTS login_attempts(key TEXT PRIMARY KEY, failures INTEGER NOT NULL, until REAL NOT NULL);
+        CREATE TABLE IF NOT EXISTS recovery(user_id INTEGER PRIMARY KEY REFERENCES users(id),
+          token_hash TEXT NOT NULL, created_at TEXT NOT NULL);
         ''')
         columns = {row['name'] for row in c.execute('PRAGMA table_info(orders)')}
         if 'paid_stamp' not in columns:
@@ -251,6 +253,30 @@ class Handler(BaseHTTPRequestHandler):
                         return self.send({'error': 'O administrador já foi configurado.'}, 409)
                     c.execute('INSERT INTO users(username,name,password,admin,created_at) VALUES(?,?,?,1,?)', (username, name, hashed, now()))
                     return self.send({'ok': True}, 201)
+                if path == '/api/recover':
+                    username = text_field(data, 'username', 40).lower()
+                    code = text_field(data, 'code', 100)
+                    password = text_field(data, 'password', 200, True)
+                    if not 4 <= len(password) <= 10:
+                        raise ValueError('Use de 4 a 10 caracteres na nova senha.')
+                    key = self.client_address[0] + ':recovery'
+                    c.execute('BEGIN IMMEDIATE')
+                    attempt = c.execute('SELECT * FROM login_attempts WHERE key=?', (key,)).fetchone()
+                    if attempt and attempt['failures'] >= 8 and attempt['until'] > time.time():
+                        return self.send({'error': 'Muitas tentativas. Aguarde 15 minutos.'}, 429)
+                    row = c.execute('''SELECT u.id,r.token_hash FROM users u JOIN recovery r ON r.user_id=u.id
+                        WHERE u.username=? AND u.active=1 AND u.admin=1''', (username,)).fetchone()
+                    valid = hmac.compare_digest(hashlib.sha256(code.encode()).hexdigest(), row['token_hash'] if row else '0'*64)
+                    if not row or not valid:
+                        failures = attempt['failures']+1 if attempt and attempt['until'] > time.time() else 1
+                        c.execute('INSERT OR REPLACE INTO login_attempts VALUES(?,?,?)', (key, failures, time.time()+900))
+                        return self.send({'error': 'Usuário ou código de recuperação inválido.'}, 400)
+                    c.execute('UPDATE users SET password=? WHERE id=?', (password_hash(password), row['id']))
+                    c.execute('DELETE FROM recovery WHERE user_id=?', (row['id'],))
+                    c.execute('DELETE FROM sessions WHERE user_id=?', (row['id'],))
+                    c.execute('DELETE FROM login_attempts WHERE key IN (?,?)', (key, self.client_address[0]+':'+username))
+                    c.execute('INSERT INTO audit(actor,action,at,snapshot) VALUES(?,?,?,?)', (row['id'], 'recuperou a própria senha', now(), '{}'))
+                    return self.send({'ok': True})
                 if path == '/api/login':
                     username = text_field(data, 'username', 40).lower()
                     password = text_field(data, 'password', 200)
@@ -290,6 +316,17 @@ class Handler(BaseHTTPRequestHandler):
                     c.execute('UPDATE users SET password=? WHERE id=?', (password_hash(new), user['id']))
                     c.execute('DELETE FROM sessions WHERE user_id=?', (user['id'],))
                     return self.send({'ok': True})
+                if path == '/api/recovery-code':
+                    if not user['admin']:
+                        return self.send({'error': 'Somente o administrador tem acesso.'}, 403)
+                    c.execute('BEGIN IMMEDIATE')
+                    row = c.execute('SELECT password FROM users WHERE id=?', (user['id'],)).fetchone()
+                    if not password_ok(text_field(data, 'current', 200), row['password']):
+                        return self.send({'error': 'Senha atual incorreta.'}, 400)
+                    code = secrets.token_urlsafe(32)
+                    c.execute('INSERT OR REPLACE INTO recovery VALUES(?,?,?)', (user['id'], hashlib.sha256(code.encode()).hexdigest(), now()))
+                    c.execute('INSERT INTO audit(actor,action,at,snapshot) VALUES(?,?,?,?)', (user['id'], 'gerou código de recuperação', now(), '{}'))
+                    return self.send({'code': code, 'username': user['username']})
                 if path == '/api/orders':
                     values = order_fields(data)
                     key = text_field(data, 'request_key', 100, True)

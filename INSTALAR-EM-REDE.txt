@@ -120,3 +120,17 @@ Nos PCs clientes, informe o endereço do principal uma vez. Ele é guardado e us
 Senhas novas: 4 a 10 caracteres, com letras, números ou ambos, sem obrigação de misturar.
 Senhas antigas continuam funcionando. Não foram definidas nem alteradas senhas existentes.
 Cada janela nova exige login; ao fechar a janela de trabalho, o login não fica salvo para a próxima sessão.
+
+NOVIDADES 1.13 — UMA ÚNICA JANELA
+O computador principal inicia o servidor e a tela de trabalho juntos, sem janela de controle separada.
+Mantenha essa janela aberta e o principal ligado para os outros PCs acessarem as OS.
+Menu Programa: Buscar atualização, Informações da rede e Fazer cópia de segurança (entre como administrador).
+Nos clientes, o endereço salvo abre direto. Para mudar o endereço, use Configurar rede do Universal OS no menu Iniciar.
+
+SENHAS
+Trocar sua senha: Minha senha.
+Esqueceu a senha de funcionário: o administrador usa Configurações > Equipe > Redefinir senha.
+Administrador: gere e guarde seu código em Configurações > Recuperação da sua senha.
+Para recuperar, use Esqueci minha senha na entrada, informe usuário, código e nova senha.
+Cada código funciona uma vez. Gerar outro invalida o anterior. Após recuperar, entre e gere outro.
+O código é exibido apenas ao gerar. Guarde-o em local privado. Sem ele, peça a outro administrador para redefinir sua senha.

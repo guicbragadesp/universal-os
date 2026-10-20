@@ -10,7 +10,7 @@ Escolha **Computador principal** em um único PC. Nos demais escolha **Acesso pe
 
 ## Atualizações
 
-A partir da versão 1.9, o aplicativo verifica novas versões ao abrir e a cada 6 horas enquanto estiver aberto. Há também o botão **Buscar atualização** na janela do programa.
+A partir da versão 1.9, o aplicativo verifica novas versões ao abrir e a cada 6 horas enquanto estiver aberto. Há também **Programa → Buscar atualização** no menu da janela.
 
 Se existir uma versão mais recente, o usuário recebe um aviso e decide quando baixar e abrir o instalador. Salve alterações antes de aceitar. O tamanho e o SHA-256 do download são conferidos; o principal cria uma cópia consistente do banco antes de abrir o instalador. Sem internet o uso na rede local continua. A primeira instalação da versão 1.9 ainda precisa ser feita manualmente.
 
@@ -28,7 +28,7 @@ Python 3.10 ou superior. O servidor não tem dependências externas; a janela de
 python desktop.py
 ```
 
-Nos clientes: `python desktop.py --cliente`. Para servidor sem janela: `python server.py --host 0.0.0.0 --port 8765`. O primeiro administrador é criado com o código exibido pelo programa; não há senha padrão.
+Nos clientes: `python desktop.py --cliente`. Para servidor sem janela: `python server.py --host 0.0.0.0 --port 8765`. Na janela do computador principal, o primeiro administrador é criado diretamente com nome, usuário e senha; não há senha padrão. No servidor sem janela, use o código exibido no terminal.
 
 ## Compilar
 
@@ -61,3 +61,9 @@ A interface abre em janela integrada do aplicativo, sem abas ou barra de endere�
 Senhas novas de 4 a 10 caracteres são aceitas no cadastro, troca e redefinição, sem composição obrigatória. Senhas antigas, inclusive mais longas, continuam aceitas no login.
 
 O instalador verifica o Microsoft WebView2 Runtime e instala o bootstrapper oficial somente se necessário. Nesse caso precisa de internet. Para recompilar, execute `download-webview2.ps1` antes de compilar `installer.iss`. O bootstrapper é conferido pela assinatura Microsoft e não é publicado no código-fonte; ele faz parte do instalador. Não altera registros ou senhas existentes.
+
+## Versão 1.13 — uma única janela e recuperação de senha
+
+O principal inicia o servidor e a interface no mesmo processo, com uma única janela. O menu **Programa** reúne atualização, informações da rede e backup completo (exige login de administrador). Ao fechar a janela do principal, a rede deixa de atender até reabrir. Nos clientes, o endereço já salvo abre diretamente a janela de trabalho; para mudar o IP, use **Configurar rede do Universal OS** no menu Iniciar.
+
+**Minha senha** permite trocar a senha atual. Em **Configurações → Equipe**, o administrador redefine senhas de outros usuários. Em **Configurações → Recuperação da sua senha**, cada administrador pode gerar seu próprio código, confirmando a senha atual. Guarde-o em local privado: ele só aparece ao gerar, e cada novo código invalida o anterior. No login, **Esqueci minha senha** aceita usuário, código e nova senha. O código é consumido após o uso e encerra as sessões anteriores desse administrador; gere outro após entrar novamente. O banco guarda apenas o hash do código e os registros de auditoria não contêm o código. Sem código guardado, peça a outro administrador para redefinir sua senha.

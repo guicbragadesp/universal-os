@@ -1,13 +1,13 @@
 [Setup]
 AppId={{90B525BC-905E-4DF8-A6BA-65B612B20011}
 AppName=Universal OS
-AppVersion=1.12
+AppVersion=1.13
 AppPublisher=Despachante Universal
 DefaultDirName={localappdata}\Programs\Universal OS
 DefaultGroupName=Universal OS
 PrivilegesRequired=lowest
 OutputDir=dist
-OutputBaseFilename=Instalar-Universal-OS-1.12
+OutputBaseFilename=Instalar-Universal-OS-1.13
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
@@ -18,7 +18,7 @@ CloseApplications=no
 RestartApplications=no
 DisableWelcomePage=no
 SetupIconFile=public\icon.ico
-UninstallDisplayIcon={app}\Universal-OS-1.12.exe
+UninstallDisplayIcon={app}\Universal-OS-1.13.exe
 
 [Languages]
 Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
@@ -26,17 +26,18 @@ Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortugue
 [Files]
 Source: "THIRD-PARTY-NOTICES.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "vendor\MicrosoftEdgeWebview2Setup.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall; Check: NeedsWebView2
-Source: "dist\Universal-OS.exe"; DestDir: "{app}"; DestName: "Universal-OS-1.12.exe"; Flags: ignoreversion onlyifdoesntexist
+Source: "dist\Universal-OS.exe"; DestDir: "{app}"; DestName: "Universal-OS-1.13.exe"; Flags: ignoreversion onlyifdoesntexist
 Source: "INSTALAR-EM-REDE.txt"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{autodesktop}\Universal OS"; Filename: "{app}\Universal-OS-1.12.exe"; Parameters: "{code:LaunchParameters}"
-Name: "{group}\Universal OS"; Filename: "{app}\Universal-OS-1.12.exe"; Parameters: "{code:LaunchParameters}"
+Name: "{autodesktop}\Universal OS"; Filename: "{app}\Universal-OS-1.13.exe"; Parameters: "{code:LaunchParameters}"
+Name: "{group}\Universal OS"; Filename: "{app}\Universal-OS-1.13.exe"; Parameters: "{code:LaunchParameters}"
+Name: "{group}\Configurar rede do Universal OS"; Filename: "{app}\Universal-OS-1.13.exe"; Parameters: "--configurar-rede"
 Name: "{group}\Como usar em rede"; Filename: "{app}\INSTALAR-EM-REDE.txt"
 
 [Run]
 Filename: "{tmp}\MicrosoftEdgeWebview2Setup.exe"; Parameters: "/silent /install"; StatusMsg: "Preparando a janela integrada do Universal OS..."; Check: NeedsWebView2; Flags: waituntilterminated
-Filename: "{app}\Universal-OS-1.12.exe"; Parameters: "{code:LaunchParameters}"; Description: "Abrir Universal OS"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\Universal-OS-1.13.exe"; Parameters: "{code:LaunchParameters}"; Description: "Abrir Universal OS"; Flags: nowait postinstall skipifsilent
 
 [Code]
 function NeedsWebView2: Boolean;
@@ -85,5 +86,6 @@ begin
     Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /T /IM Universal-OS-1.9.exe', '', SW_HIDE, ewWaitUntilTerminated, ExitCode);
     Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /T /IM Universal-OS-1.10.exe', '', SW_HIDE, ewWaitUntilTerminated, ExitCode);
     Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /T /IM Universal-OS-1.11.exe', '', SW_HIDE, ewWaitUntilTerminated, ExitCode);
+    Exec(ExpandConstant('{sys}\taskkill.exe'), '/F /T /IM Universal-OS-1.12.exe', '', SW_HIDE, ewWaitUntilTerminated, ExitCode);
   end;
 end;

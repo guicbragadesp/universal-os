@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "app": "universal-os",
-  "version": "1.12.0",
-  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.12.0/Instalar-Universal-OS-1.12.exe",
-  "sha256": "aaa76162ca9fe64320c9ec506b82f66e39b9b3f7d6a06b9bac0670b43f05c09f",
-  "size": 24467012,
-  "notes": "Janela própria sem abas do navegador e senhas novas de 4 a 10 caracteres. Mantém uso em rede, dados existentes, duas vias e pagamento automático."
+  "version": "1.13.0",
+  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.13.0/Instalar-Universal-OS-1.13.exe",
+  "sha256": "7542e0757bbadaa752ee480de3a6f8e25ca9d1a65710054240c622e18eafa8c8",
+  "size": 24454871,
+  "notes": "Uma única janela, menu Programa e recuperação de senha com código. Salve as OS antes de instalar. Mantenha a janela do principal aberta para atender a rede."
 }
