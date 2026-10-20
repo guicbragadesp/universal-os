@@ -65,6 +65,10 @@ def initialize():
         columns = {row['name'] for row in c.execute('PRAGMA table_info(orders)')}
         if 'paid_stamp' not in columns:
             c.execute('ALTER TABLE orders ADD COLUMN paid_stamp INTEGER NOT NULL DEFAULT 0')
+        if 'payment_confirmed_by' not in columns:
+            c.execute('ALTER TABLE orders ADD COLUMN payment_confirmed_by INTEGER REFERENCES users(id)')
+        if 'payment_confirmed_at' not in columns:
+            c.execute('ALTER TABLE orders ADD COLUMN payment_confirmed_at TEXT')
 
 def password_hash(password):
     salt = secrets.token_hex(16)
@@ -133,11 +137,14 @@ def order_json(row):
     value = dict(row)
     value['items'] = json.loads(value['items'])
     value['balance'] = value['total'] - value['paid']
+    value['payment_confirmed'] = bool(value.get('payment_confirmed_by') and value.get('payment_confirmed_at')
+                                      and value['total'] > 0 and value['paid'] == value['total'])
     value.pop('request_key', None)
     return value
 
-ORDER_SELECT = '''SELECT o.*, c.name AS created_name, u.name AS updated_name FROM orders o
-                  JOIN users c ON c.id=o.created_by JOIN users u ON u.id=o.updated_by'''
+ORDER_SELECT = '''SELECT o.*, c.name AS created_name, u.name AS updated_name, a.name AS payment_confirmed_name FROM orders o
+                  JOIN users c ON c.id=o.created_by JOIN users u ON u.id=o.updated_by
+                  LEFT JOIN users a ON a.id=o.payment_confirmed_by'''
 
 class Handler(BaseHTTPRequestHandler):
     server_version = 'UniversalOS'
@@ -202,6 +209,8 @@ class Handler(BaseHTTPRequestHandler):
                     page = max(1, min(100000, int(query.get('page', ['1'])[0])))
                     plate = re.sub(r'[-\s]', '', q).upper()
                     where = ' WHERE (?="" OR CAST(o.number AS TEXT)=? OR o.plate LIKE ? OR o.name LIKE ?)'
+                    if query.get('payment_review', [''])[0] == 'pending':
+                        where += ' AND o.total>0 AND o.paid=o.total AND o.payment_confirmed_by IS NULL'
                     args = (q, q, '%' + plate + '%', '%' + q + '%')
                     rows = c.execute(ORDER_SELECT + where + ' ORDER BY o.number DESC LIMIT 50 OFFSET ?', (*args, (page-1)*50)).fetchall()
                     count = c.execute('SELECT COUNT(*) FROM orders o' + where, args).fetchone()[0]
@@ -344,6 +353,30 @@ class Handler(BaseHTTPRequestHandler):
                     c.execute('UPDATE settings SET next_number=? WHERE id=1', (number+1,))
                     c.execute('INSERT INTO audit(order_id,actor,action,at,snapshot) VALUES(?,?,?,?,?)', (cur.lastrowid, user['id'], 'criou', stamp, json.dumps(values, ensure_ascii=False)))
                     return self.send({'id': cur.lastrowid, 'number': number}, 201)
+                match = re.fullmatch(r'/api/orders/(\d+)/(confirm-payment|reopen-payment-review)', path)
+                if match:
+                    if not user['admin']:
+                        return self.send({'error': 'Somente a gerência, com acesso de administrador, pode conferir recebimentos.'}, 403)
+                    c.execute('BEGIN IMMEDIATE')
+                    row = c.execute('SELECT * FROM orders WHERE id=?', (int(match[1]),)).fetchone()
+                    if not row:
+                        return self.send({'error': 'OS não encontrada.'}, 404)
+                    if type(data.get('version')) is not int or data['version'] != row['version']:
+                        return self.send({'error': 'A OS mudou. Reabra e confira os valores antes de confirmar.'}, 409)
+                    confirm = match[2] == 'confirm-payment'
+                    if confirm and (row['total'] <= 0 or row['paid'] != row['total']):
+                        return self.send({'error': 'A confirmação final exige pagamento informado igual ao total da OS.'}, 400)
+                    if bool(row['payment_confirmed_by']) == confirm:
+                        return self.send({'id': row['id'], 'ok': True})
+                    stamp = now()
+                    c.execute('''UPDATE orders SET payment_confirmed_by=?,payment_confirmed_at=?,
+                        updated_by=?,updated_at=?,version=version+1 WHERE id=?''',
+                        (user['id'] if confirm else None, stamp if confirm else None, user['id'], stamp, row['id']))
+                    action = 'confirmou o recebimento' if confirm else 'reabriu a conferência do recebimento'
+                    snapshot = {'paid': row['paid'], 'total': row['total'], 'previous_version': row['version']}
+                    c.execute('INSERT INTO audit(order_id,actor,action,at,snapshot) VALUES(?,?,?,?,?)',
+                              (row['id'], user['id'], action, stamp, json.dumps(snapshot)))
+                    return self.send({'id': row['id'], 'ok': True})
                 match = re.fullmatch(r'/api/orders/(\d+)', path)
                 if match:
                     values = order_fields(data)
@@ -354,9 +387,13 @@ class Handler(BaseHTTPRequestHandler):
                     if data.get('version') != row['version']:
                         return self.send({'error': 'Outro usuário alterou esta OS. Reabra a OS para carregar a versão atual.'}, 409)
                     stamp = now()
-                    c.execute('''UPDATE orders SET date=?,name=?,phone=?,vehicle=?,plate=?,items=?,paid=?,total=?,notes=?,updated_by=?,updated_at=?,paid_stamp=?,version=version+1 WHERE id=?''',
-                        (values['date'],values['name'],values['phone'],values['vehicle'],values['plate'],json.dumps(values['items'],ensure_ascii=False),values['paid'],values['total'],values['notes'],user['id'],stamp,values['paid_stamp'],row['id']))
-                    c.execute('INSERT INTO audit(order_id,actor,action,at,snapshot) VALUES(?,?,?,?,?)', (row['id'],user['id'],'alterou',stamp,json.dumps(values,ensure_ascii=False)))
+                    financial_changed = values['total'] != row['total'] or values['paid'] != row['paid'] or values['items'] != json.loads(row['items'])
+                    confirmed_by = None if financial_changed else row['payment_confirmed_by']
+                    confirmed_at = None if financial_changed else row['payment_confirmed_at']
+                    c.execute('''UPDATE orders SET date=?,name=?,phone=?,vehicle=?,plate=?,items=?,paid=?,total=?,notes=?,updated_by=?,updated_at=?,paid_stamp=?,payment_confirmed_by=?,payment_confirmed_at=?,version=version+1 WHERE id=?''',
+                        (values['date'],values['name'],values['phone'],values['vehicle'],values['plate'],json.dumps(values['items'],ensure_ascii=False),values['paid'],values['total'],values['notes'],user['id'],stamp,values['paid_stamp'],confirmed_by,confirmed_at,row['id']))
+                    action = 'alterou valores ou serviços e reabriu a conferência' if financial_changed and row['payment_confirmed_by'] else 'alterou'
+                    c.execute('INSERT INTO audit(order_id,actor,action,at,snapshot) VALUES(?,?,?,?,?)', (row['id'],user['id'],action,stamp,json.dumps(values,ensure_ascii=False)))
                     return self.send({'id': row['id'], 'number': row['number']})
                 if not user['admin']:
                     return self.send({'error': 'Somente o administrador tem acesso.'}, 403)

@@ -82,3 +82,10 @@ A tela mostra a última cópia criada e eventuais falhas. Fazer backup agora per
 O programa confirma a criação local do arquivo; o envio à nuvem depende do Google Drive conectado e sincronizando.
 O backup começa desativado até você escolher a pasta e salvar a configuração no computador principal.
 Não é preciso configurar nos PCs clientes. A atualização preserva o banco e as configurações existentes.
+
+
+## Conferência da gerência — versão 1.15
+
+O carimbo PAGO continua independente da conferência. Quando o pagamento cobre o total, a OS fica aguardando conferência. Somente um administrador pode marcar que verificou a entrada do dinheiro e confirmar o recebimento. O sistema registra nome, data e horário no histórico. A gerência também pode reabrir a conferência.
+
+Na lista de OS, o administrador pode filtrar as conferências pendentes. Alterar valores ou serviços cancela a confirmação anterior e exige nova conferência; alterar apenas observações a mantém. Registros antigos não são aprovados automaticamente. Essa conferência é manual: não existe consulta automática à conta bancária.

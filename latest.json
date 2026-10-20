@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "app": "universal-os",
-  "version": "1.14.0",
-  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.14.0/Instalar-Universal-OS-1.14.exe",
-  "sha256": "ee76928e3054c24172b4e447da8ccf805c91fc33971e8c45c1b0197b5ec3db82",
-  "size": 24484304,
-  "notes": "Endereço copiável e backup diário às 17h30. Para ativar, escolha a pasta sincronizada em Programa > Backup automático — Google Drive. Salve as OS antes de instalar."
+  "version": "1.15.0",
+  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.15.0/Instalar-Universal-OS-1.15.exe",
+  "sha256": "4c06c60d6e84aeb083e07e89e4ca2aa906b5f3f3cf24d018cf56097ffd3d71d5",
+  "size": 24488143,
+  "notes": "Conferência de recebimento exclusiva da gerência, com responsável, data e histórico. O carimbo PAGO permanece independente. Alterações em valores ou serviços exigem nova conferência. Salve as OS antes de instalar."
 }

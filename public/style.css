@@ -21,3 +21,5 @@
 
 /* Linhas leves para as duas vias, sem alterar a tela de digitação. */
 .os-copy{border:.5px solid #999}.copy-address,.copy-line span{border-bottom:.5px solid #999}.copy-table th,.copy-table td,.copy-table tbody tr:last-child td{border:.5px solid #999}.copy-cut:after{border-top:.5px dashed #bbb}
+
+.payment-review-label{font-size:12px;margin-top:7px;line-height:1.35}.review-confirmed{color:#176d60}.review-pending{color:#946100}.payment-review p{font-size:14px;line-height:1.5}.payment-review h3{font-size:18px}.payment-review .note{font-size:12px}#review-error{color:#a22;font-size:13px;margin-top:10px}
