@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "app": "universal-os",
-  "version": "1.9.0",
-  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.9.0/Instalar-Universal-OS-1.9.exe",
-  "sha256": "913c27ebf95a723ec2440400256f102c0f794a0ac282a7013dd72483d926e3e5",
-  "size": 14876481,
-  "notes": "Atualização pela internet com aviso antes de instalar, conferência do instalador e backup automático no computador principal."
+  "version": "1.10.0",
+  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.10.0/Instalar-Universal-OS-1.10.exe",
+  "sha256": "e0b8303b50c6b6fb54737729a7e662966d2f1166b65fdfd13bcaeda6b54ca58c",
+  "size": 14876077,
+  "notes": "Imprimir / PDF salva automaticamente a OS antes de abrir a impressão. O botão Salvar continua separado, sem imprimir. Erros de salvamento impedem a impressão."
 }

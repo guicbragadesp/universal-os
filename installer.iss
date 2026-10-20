@@ -1,13 +1,13 @@
 [Setup]
 AppId={{90B525BC-905E-4DF8-A6BA-65B612B20011}
 AppName=Universal OS
-AppVersion=1.9
+AppVersion=1.10
 AppPublisher=Despachante Universal
 DefaultDirName={localappdata}\Programs\Universal OS
 DefaultGroupName=Universal OS
 PrivilegesRequired=lowest
 OutputDir=dist
-OutputBaseFilename=Instalar-Universal-OS-1.9
+OutputBaseFilename=Instalar-Universal-OS-1.10
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
@@ -18,22 +18,22 @@ CloseApplications=no
 RestartApplications=no
 DisableWelcomePage=no
 SetupIconFile=public\icon.ico
-UninstallDisplayIcon={app}\Universal-OS-1.9.exe
+UninstallDisplayIcon={app}\Universal-OS-1.10.exe
 
 [Languages]
 Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
 
 [Files]
-Source: "dist\Universal-OS.exe"; DestDir: "{app}"; DestName: "Universal-OS-1.9.exe"; Flags: ignoreversion onlyifdoesntexist
+Source: "dist\Universal-OS.exe"; DestDir: "{app}"; DestName: "Universal-OS-1.10.exe"; Flags: ignoreversion onlyifdoesntexist
 Source: "INSTALAR-EM-REDE.txt"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{autodesktop}\Universal OS"; Filename: "{app}\Universal-OS-1.9.exe"; Parameters: "{code:LaunchParameters}"
-Name: "{group}\Universal OS"; Filename: "{app}\Universal-OS-1.9.exe"; Parameters: "{code:LaunchParameters}"
+Name: "{autodesktop}\Universal OS"; Filename: "{app}\Universal-OS-1.10.exe"; Parameters: "{code:LaunchParameters}"
+Name: "{group}\Universal OS"; Filename: "{app}\Universal-OS-1.10.exe"; Parameters: "{code:LaunchParameters}"
 Name: "{group}\Como usar em rede"; Filename: "{app}\INSTALAR-EM-REDE.txt"
 
 [Run]
-Filename: "{app}\Universal-OS-1.9.exe"; Parameters: "{code:LaunchParameters}"; Description: "Abrir Universal OS"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\Universal-OS-1.10.exe"; Parameters: "{code:LaunchParameters}"; Description: "Abrir Universal OS"; Flags: nowait postinstall skipifsilent
 
 [Code]
 var ModePage: TInputOptionWizardPage;

@@ -43,3 +43,7 @@ Compile `installer.iss` com Inno Setup. O arquivo está configurado para esta ve
 ## Impressão
 
 Papel A4, escala 100%, cabeçalhos e rodapés do navegador desativados. O nome sugerido do PDF é `PLACA - OS NUMERO.pdf`. O carimbo PAGO exige pagamento integral. Os campos Nome, Telefone, Veículo e Placa têm o destaque definido para impressão; a tela de digitação conserva seu estilo.
+
+## Versão 1.10
+
+**Imprimir / PDF** salva novas OS e alterações automaticamente antes de abrir a impressão. **Salvar** apenas salva, sem imprimir. Se houver dados inválidos, conflito de edição ou erro no salvamento, a impressão não abre. Reimprimir mantém o número da OS.

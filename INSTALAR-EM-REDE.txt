@@ -1,10 +1,10 @@
-UNIVERSAL OS 1.9 — INSTALAÇÃO EM REDE
+UNIVERSAL OS 1.10 — INSTALAÇÃO EM REDE
 
 Este instalador inclui o programa e o Python necessário. Não é preciso instalar Python nos computadores.
 Compilação para Windows 10/11 de 64 bits. Esta versão não é para Windows 7.
 
 1. NO COMPUTADOR PRINCIPAL
-Execute Instalar-Universal-OS-1.9.exe e escolha:
+Execute Instalar-Universal-OS-1.10.exe e escolha:
 "Computador principal: este PC guarda as OS e atende a equipe".
 
 Abra pelo atalho Universal OS. A janela mostra que o programa está funcionando e exibe o endereço para os outros PCs.
@@ -96,3 +96,8 @@ No principal, é feito um backup consistente do banco antes de abrir o instalado
 Sem internet, o funcionamento local continua; a verificação pode ser tentada depois.
 Origem oficial: https://github.com/guicbragadesp/universal-os
 Nenhum registro de cliente é enviado ao GitHub.
+
+NOVIDADES 1.10
+Imprimir / PDF salva as alterações antes de abrir a impressão, inclusive para novas OS.
+O botão Salvar continua independente e não abre impressão.
+Se ocorrer falha de validação, conflito ou erro de salvamento, a impressão não abre.
