@@ -1,0 +1,98 @@
+UNIVERSAL OS 1.9 — INSTALAÇÃO EM REDE
+
+Este instalador inclui o programa e o Python necessário. Não é preciso instalar Python nos computadores.
+Compilação para Windows 10/11 de 64 bits. Esta versão não é para Windows 7.
+
+1. NO COMPUTADOR PRINCIPAL
+Execute Instalar-Universal-OS-1.9.exe e escolha:
+"Computador principal: este PC guarda as OS e atende a equipe".
+
+Abra pelo atalho Universal OS. A janela mostra que o programa está funcionando e exibe o endereço para os outros PCs.
+Mantenha este computador ligado, sem suspender, e o programa aberto enquanto a equipe usar o sistema.
+Se o Windows pedir autorização de rede, permita somente na rede privada do escritório.
+
+No primeiro acesso, clique em "Copiar código e abrir cadastro" e cole o código no campo do navegador.
+Cadastre seu nome, usuário e senha. Depois entre no sistema e cadastre os funcionários em Configurações.
+O próximo número começa em 40952, mas pode ser ajustado antes de usar.
+
+2. NOS OUTROS COMPUTADORES
+Execute o MESMO instalador e escolha:
+"Acesso pela rede: este PC usa as OS do computador principal".
+
+Abra pelo atalho Universal OS. Cole o endereço mostrado na janela do computador principal e clique em Salvar endereço e abrir.
+Exemplo: http://192.168.1.30:8765/ — use o endereço real do principal.
+Nos PCs clientes, NÃO use localhost: esse endereço sempre aponta para o próprio computador.
+Entre com o usuário e senha cadastrados para cada funcionário.
+
+3. TODOS COMPARTILHAM AS MESMAS OS
+Os clientes não criam outro banco. Busca, edição, impressão e numeração usam o computador principal.
+Se o principal estiver desligado, suspenso ou com o programa fechado, os clientes não conseguirão acessar.
+Se o IP dele mudar, atualize o endereço nos clientes. Reserve um IP para ele no roteador, com ajuda do responsável pela rede.
+Não instale vários principais para o mesmo escritório: isso criaria bancos independentes.
+
+4. REGISTROS E BACKUP
+Os registros do principal ficam em %LOCALAPPDATA%\UniversalOS\data.
+Use sempre o mesmo usuário do Windows no computador principal.
+Atualizar ou desinstalar o aplicativo não remove essa pasta de registros.
+Use "Fazer cópia de segurança" na janela do principal e guarde a cópia em outro disco ou local privado.
+Não há backup automático configurado.
+
+Se já usou a versão anterior e criou OS, não descarte sua pasta antiga data.
+O programa oferece importar o banco anterior quando ele está na pasta data ao lado do executável e ainda não existe banco novo.
+Se já houver registros nos dois bancos, peça ajuda para migrar, sem substituir os arquivos.
+
+5. SE APARECER CONEXÃO RECUSADA
+Confira se o programa está aberto no principal, se o endereço está correto e se todos estão na mesma rede.
+O firewall do principal precisa permitir o Universal OS na rede privada, porta TCP 8765.
+O instalador não desliga o firewall e não abre portas na internet.
+
+Esta instalação funciona na rede local. Acesso fora do escritório e nuvem ainda exigem hospedagem.
+
+NOVIDADES 1.3
+Em Pagamento e observações, marque Incluir carimbo PAGO quando o saldo estiver zerado e salve a OS.
+O carimbo aparecerá na impressão e no PDF. Se o pagamento voltar a ser parcial, o carimbo será desmarcado.
+As observações são impressas em vermelho abaixo dos totais. Textos longos podem continuar na página seguinte.
+Para atualizar, faça backup, encerre o programa principal e execute o novo instalador no mesmo usuário do Windows.
+Escolha novamente o modo principal no principal e cliente nos demais PCs. Os registros existentes são preservados.
+
+NOVIDADES 1.3
+Carimbo PAGO grande e centralizado na folha, com transparência para manter valores legíveis.
+Observações em vermelho com fonte maior e em negrito.
+
+NOVIDADES 1.4
+Clique no valor para selecionar tudo e digite o novo valor.
+Digite 150 para R$ 150,00; use 150,50 ou 150.50 para centavos.
+O valor é formatado ao sair do campo. Enter avança ao próximo valor sem salvar a OS automaticamente.
+O botão Preencher pagamento com o total facilita pagamentos integrais.
+O carimbo PAGO permanece grande e central, agora em vermelho.
+
+NOVIDADES 1.5
+Campos digitados com fontes maiores, negrito e texto centralizado.
+Na impressão, dados preenchidos, serviços, valores e observações também ficam maiores, em negrito e centralizados.
+
+CORREÇÃO 1.6
+Somente Nome, Telefone, Veículo e Placa preenchidos no cabeçalho impresso ficam maiores, em negrito e centralizados.
+Tela de digitação, tabela e observações voltam ao formato da versão 1.4.
+Carimbo PAGO grande, central e vermelho permanece.
+
+NOVIDADES 1.7
+Ícone do programa, atalho, instalador e aba do navegador em forma de OS em branco.
+Ao imprimir com Salvar como PDF, o nome sugerido usa PLACA - OS NUMERO.pdf.
+Exemplo: ABC1D23 - OS 40952.pdf. O navegador permite alterar o nome e escolher a pasta.
+
+CORREÇÃO 1.8 — INSTALAÇÃO
+O instalador grava Universal-OS-1.8.exe e atualiza o atalho, sem substituir o executável antigo bloqueado.
+A versão anterior Universal-OS.exe é encerrada durante a instalação. Salve as alterações antes de continuar.
+A pasta de registros é a mesma: %LOCALAPPDATA%\UniversalOS\data.
+Cancele instaladores antigos abertos e execute apenas o instalador 1.8.
+Se já existir banco no caminho padrão, a opção computador principal vem selecionada; confira antes de instalar.
+
+NOVIDADES 1.9 — ATUALIZAÇÃO PELA INTERNET
+O programa verifica novidades ao abrir e a cada 6 horas enquanto estiver aberto.
+Também há o botão Buscar atualização na janela do programa.
+Quando houver uma nova versão, você escolhe se deseja baixar e abrir o instalador.
+Salve as OS antes de aceitar. O programa confere o tamanho e SHA-256 do arquivo.
+No principal, é feito um backup consistente do banco antes de abrir o instalador.
+Sem internet, o funcionamento local continua; a verificação pode ser tentada depois.
+Origem oficial: https://github.com/guicbragadesp/universal-os
+Nenhum registro de cliente é enviado ao GitHub.

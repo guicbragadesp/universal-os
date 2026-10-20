@@ -1,0 +1,12 @@
+data/
+backups/
+updates/
+__pycache__/
+*.sqlite3*
+*.exe
+*.zip
+*.part
+.env
+build/
+dist/
+*.spec

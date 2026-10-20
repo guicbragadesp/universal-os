@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "app": "universal-os",
+  "version": "1.9.0",
+  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.9.0/Instalar-Universal-OS-1.9.exe",
+  "sha256": "913c27ebf95a723ec2440400256f102c0f794a0ac282a7013dd72483d926e3e5",
+  "size": 14876481,
+  "notes": "Atualização pela internet com aviso antes de instalar, conferência do instalador e backup automático no computador principal."
+}
