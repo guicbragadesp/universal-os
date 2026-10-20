@@ -47,3 +47,9 @@ Papel A4, escala 100%, cabeçalhos e rodapés do navegador desativados. O nome s
 ## Versão 1.10
 
 **Imprimir / PDF** salva novas OS e alterações automaticamente antes de abrir a impressão. **Salvar** apenas salva, sem imprimir. Se houver dados inválidos, conflito de edição ou erro no salvamento, a impressão não abre. Reimprimir mantém o número da OS.
+
+## Versão 1.11
+
+Impressão em duas vias na mesma folha A4: cliente em cima, escritório embaixo. Escolha ambas, só cliente ou só escritório. Cada via mantém 135 mm de altura e a mesma posição; a outra metade fica em branco quando não selecionada. Textos extensos continuam em outras folhas sem reduzir a fonte ou cortar dados. Linhas finas em cinza.
+
+Marcar PAGO preenche o pagamento até o total da OS, incluindo o restante de pagamentos parciais. Desmarcar remove o carimbo sem apagar o pagamento. O banco continua exigindo quitação para salvar o carimbo.

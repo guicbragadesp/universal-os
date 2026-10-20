@@ -1,10 +1,10 @@
-UNIVERSAL OS 1.10 — INSTALAÇÃO EM REDE
+UNIVERSAL OS 1.11 — INSTALAÇÃO EM REDE
 
 Este instalador inclui o programa e o Python necessário. Não é preciso instalar Python nos computadores.
 Compilação para Windows 10/11 de 64 bits. Esta versão não é para Windows 7.
 
 1. NO COMPUTADOR PRINCIPAL
-Execute Instalar-Universal-OS-1.10.exe e escolha:
+Execute Instalar-Universal-OS-1.11.exe e escolha:
 "Computador principal: este PC guarda as OS e atende a equipe".
 
 Abra pelo atalho Universal OS. A janela mostra que o programa está funcionando e exibe o endereço para os outros PCs.
@@ -101,3 +101,13 @@ NOVIDADES 1.10
 Imprimir / PDF salva as alterações antes de abrir a impressão, inclusive para novas OS.
 O botão Salvar continua independente e não abre impressão.
 Se ocorrer falha de validação, conflito ou erro de salvamento, a impressão não abre.
+
+NOVIDADES 1.11 — DUAS VIAS
+Escolha Ambas as vias, Somente cliente ou Somente escritório ao lado de Imprimir / PDF.
+Cada via ocupa meia folha A4, sempre com o mesmo tamanho: cliente em cima e escritório embaixo.
+Ao imprimir só uma via, a outra metade fica em branco.
+Serviços e observações extensos continuam em outra folha, mantendo as duas posições e o mesmo tamanho.
+Use A4, escala 100%, sem cabeçalhos e rodapés do navegador.
+
+Ao marcar PAGO, o valor pago é completado automaticamente até o total da OS, considerando qualquer pagamento parcial existente.
+Desmarcar PAGO retira o carimbo, sem apagar o pagamento informado.

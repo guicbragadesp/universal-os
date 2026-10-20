@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "app": "universal-os",
-  "version": "1.10.0",
-  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.10.0/Instalar-Universal-OS-1.10.exe",
-  "sha256": "e0b8303b50c6b6fb54737729a7e662966d2f1166b65fdfd13bcaeda6b54ca58c",
-  "size": 14876077,
-  "notes": "Imprimir / PDF salva automaticamente a OS antes de abrir a impressão. O botão Salvar continua separado, sem imprimir. Erros de salvamento impedem a impressão."
+  "version": "1.11.0",
+  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.11.0/Instalar-Universal-OS-1.11.exe",
+  "sha256": "6c630035f717c1789ae1dcf978744a33513273866b9fe0aada6a70600cdc5677",
+  "size": 14878459,
+  "notes": "Duas vias na mesma folha A4, escolha de cliente/escritório mantendo tamanho e posição, linhas mais finas e PAGO preenchendo automaticamente o pagamento restante."
 }

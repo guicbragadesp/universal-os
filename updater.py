@@ -12,7 +12,7 @@ import urllib.request
 from urllib.parse import urlsplit
 import datetime
 
-VERSION = '1.10.0'
+VERSION = '1.11.0'
 FEED_URL = 'https://raw.githubusercontent.com/guicbragadesp/universal-os/main/latest.json'
 DOWNLOAD_PREFIX = 'https://github.com/guicbragadesp/universal-os/releases/download/'
 MAX_DOWNLOAD = 150 * 1024 * 1024
