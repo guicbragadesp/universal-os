@@ -1,10 +1,10 @@
-UNIVERSAL OS 1.11 — INSTALAÇÃO EM REDE
+UNIVERSAL OS 1.12 — INSTALAÇÃO EM REDE
 
 Este instalador inclui o programa e o Python necessário. Não é preciso instalar Python nos computadores.
 Compilação para Windows 10/11 de 64 bits. Esta versão não é para Windows 7.
 
 1. NO COMPUTADOR PRINCIPAL
-Execute Instalar-Universal-OS-1.11.exe e escolha:
+Execute Instalar-Universal-OS-1.12.exe e escolha:
 "Computador principal: este PC guarda as OS e atende a equipe".
 
 Abra pelo atalho Universal OS. A janela mostra que o programa está funcionando e exibe o endereço para os outros PCs.
@@ -111,3 +111,12 @@ Use A4, escala 100%, sem cabeçalhos e rodapés do navegador.
 
 Ao marcar PAGO, o valor pago é completado automaticamente até o total da OS, considerando qualquer pagamento parcial existente.
 Desmarcar PAGO retira o carimbo, sem apagar o pagamento informado.
+
+NOVIDADES 1.12 — JANELA PRÓPRIA
+O sistema abre em janela própria, sem abas nem barra de endereço do navegador.
+A janela de controle do principal continua aberta para manter o atendimento da rede e oferecer atualização e backup.
+O instalador verifica o componente Microsoft WebView2 e instala a partir da Microsoft somente quando necessário; nesse caso precisa de internet.
+Nos PCs clientes, informe o endereço do principal uma vez. Ele é guardado e usado nas próximas aberturas.
+Senhas novas: 4 a 10 caracteres, com letras, números ou ambos, sem obrigação de misturar.
+Senhas antigas continuam funcionando. Não foram definidas nem alteradas senhas existentes.
+Cada janela nova exige login; ao fechar a janela de trabalho, o login não fica salvo para a próxima sessão.

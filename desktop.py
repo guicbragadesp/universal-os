@@ -14,11 +14,65 @@ import socket
 import sqlite3
 import threading
 import urllib.request
-import webbrowser
+import subprocess
 from http.server import ThreadingHTTPServer
 from urllib.parse import urlsplit
 import server
 import updater
+
+APP_WINDOWS = []
+
+def open_app_window(url):
+    if getattr(sys, 'frozen', False):
+        command = [sys.executable, '--web-window', url]
+    else:
+        command = [sys.executable, str(Path(__file__).resolve()), '--web-window', url]
+    child = subprocess.Popen(command)
+    APP_WINDOWS.append(child)
+
+def run_web_window(url):
+    try:
+        parsed = urlsplit(url)
+        if parsed.scheme not in ('http', 'https') or not parsed.hostname or parsed.username or parsed.password:
+            raise ValueError('Endereço inválido para a janela do Universal OS.')
+        import webview
+        webview.settings['ALLOW_DOWNLOADS'] = True
+        webview.settings['ALLOW_FILE_URLS'] = False
+        webview.create_window('Universal OS', url, width=1280, height=850, min_size=(900, 620), text_select=True, zoomable=True)
+        webview.start(gui='edgechromium', private_mode=True, icon=str(server.ROOT / 'public' / 'icon.ico'))
+    except Exception as error:
+        import tkinter as tk
+        from tkinter import messagebox
+        root = tk.Tk()
+        root.withdraw()
+        messagebox.showerror('Universal OS — janela integrada', 'Não foi possível abrir a janela integrada. Reinstale a atualização para conferir o componente Microsoft WebView2.\n\nDetalhe: ' + str(error))
+        root.destroy()
+
+def smoke_web_window(report):
+    import webview
+    server.initialize()
+    httpd = ThreadingHTTPServer(('127.0.0.1', 0), server.Handler)
+    threading.Thread(target=httpd.serve_forever, daemon=True).start()
+    window = webview.create_window('Universal OS', 'http://127.0.0.1:' + str(httpd.server_port), hidden=True)
+    result = {}
+    def verify():
+        try:
+            if not window.events.loaded.wait(35):
+                raise RuntimeError('A janela integrada não carregou.')
+            value = window.evaluate_js("JSON.stringify({login:!!document.querySelector('#login-form'),print:typeof window.print})")
+            result.update(json.loads(value))
+            result['renderer'] = webview.guilib.renderer
+            assert result['login'] and result['print'] == 'function' and result['renderer'] == 'edgechromium'
+            result['ok'] = True
+        except Exception as error:
+            result.update(ok=False, error=str(error))
+        finally:
+            Path(report).write_text(json.dumps(result, indent=2), encoding='utf-8')
+            window.destroy()
+    webview.start(verify, gui='edgechromium', private_mode=True, storage_path=str(server.DATA / 'webview-test'), icon=str(server.ROOT / 'public' / 'icon.ico'))
+    httpd.shutdown()
+    httpd.server_close()
+
 
 def backup(destination):
     destination.mkdir(parents=True, exist_ok=True)
@@ -97,7 +151,7 @@ def client_mode():
             return
         config.parent.mkdir(parents=True, exist_ok=True)
         config.write_text(json.dumps({'url':value}), encoding='utf-8')
-        webbrowser.open(value)
+        open_app_window(value)
     ttk.Button(frame,text='SALVAR ENDEREÇO E ABRIR',command=open_remote).pack(fill='x',pady=12,ipady=7)
     label('Exemplo: http://192.168.1.10:8765/ — use o IP real do computador principal.',9)
     updater.attach(root, frame, server.DATA, False)
@@ -112,7 +166,7 @@ def run():
 
     mutex = ctypes.windll.kernel32.CreateMutexW(None, False, 'Local\\UniversalOSDesktop8765')
     if ctypes.windll.kernel32.GetLastError() == 183:
-        webbrowser.open('http://localhost:8765/')
+        open_app_window('http://localhost:8765/')
         return
     root = tk.Tk()
     root.iconbitmap(str(server.ROOT / 'public' / 'icon.ico'))
@@ -147,7 +201,7 @@ def run():
                 if 'defaults' not in value or 'setup' not in value:
                     raise ValueError()
                 messagebox.showinfo('Universal OS já aberto', 'O servidor já está funcionando. Vou abrir o navegador. Mantenha a janela da versão anterior aberta enquanto usar o sistema.')
-                webbrowser.open('http://localhost:8765/')
+                open_app_window('http://localhost:8765/')
                 root.destroy()
                 return
             except Exception:
@@ -165,7 +219,7 @@ def run():
             return w
         label('DESPACHANTE UNIVERSAL', 19, True)
         label('●  Programa funcionando', 12, True, '#197149')
-        label('O sistema abrirá no navegador. Mantenha esta janela aberta.\nEndereço neste computador: http://localhost:8765/')
+        label('O sistema abrirá em sua própria janela. Mantenha esta janela aberta.\nEndereço neste computador: http://localhost:8765/')
         addresses = []
         try:
             for info in socket.getaddrinfo(socket.gethostname(), 8765, socket.AF_INET, socket.SOCK_STREAM):
@@ -193,7 +247,7 @@ def run():
         label('Se o Windows perguntar, permita acesso somente em redes privadas.\nO computador principal deve ficar ligado, sem suspender.', 9)
         if first:
             label('PRIMEIRO ACESSO', 11, True)
-            label('1. Clique em Copiar código.\n2. Na tela do navegador, cole no campo Código de configuração.\n3. Escolha seu nome, usuário e senha para entrar.', 10)
+            label('1. Clique em Copiar código.\n2. Na janela do programa, cole no campo Código de configuração.\n3. Escolha seu nome, usuário e senha para entrar.', 10)
             code = ttk.Entry(frame, font=('Consolas',11))
             code.insert(0,server.SETUP_TOKEN)
             code.configure(state='readonly')
@@ -202,9 +256,9 @@ def run():
                 root.clipboard_clear()
                 root.clipboard_append(server.SETUP_TOKEN)
                 root.update()
-                webbrowser.open('http://localhost:8765/')
+                open_app_window('http://localhost:8765/')
             ttk.Button(frame, text='Copiar código e abrir cadastro', command=copy_code).pack(fill='x', pady=4)
-        ttk.Button(frame, text='ABRIR O PROGRAMA', command=lambda: webbrowser.open('http://localhost:8765/')).pack(fill='x', pady=9, ipady=8)
+        ttk.Button(frame, text='ABRIR O PROGRAMA', command=lambda: open_app_window('http://localhost:8765/')).pack(fill='x', pady=9, ipady=8)
         def save_backup():
             destination = filedialog.askdirectory(title='Escolha onde guardar a cópia de segurança')
             if destination:
@@ -223,7 +277,7 @@ def run():
         updater.attach(root, frame, server.DATA, True, lambda: (httpd.shutdown(), httpd.server_close()))
         root.protocol('WM_DELETE_WINDOW', close)
         root.deiconify()
-        root.after(900, lambda: webbrowser.open('http://localhost:8765/'))
+        root.after(900, lambda: open_app_window('http://localhost:8765/'))
         root.mainloop()
     except Exception as e:
         messagebox.showerror('Universal OS — não foi possível iniciar', str(e))
@@ -235,6 +289,10 @@ def run():
 if __name__ == '__main__':
     if len(sys.argv) == 3 and sys.argv[1] == '--self-test':
         smoke_test(sys.argv[2])
+    elif len(sys.argv) == 3 and sys.argv[1] == '--web-self-test':
+        smoke_web_window(sys.argv[2])
+    elif len(sys.argv) == 3 and sys.argv[1] == '--web-window':
+        run_web_window(sys.argv[2])
     elif '--cliente' in sys.argv:
         client_mode()
     else:

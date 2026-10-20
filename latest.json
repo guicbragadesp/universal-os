@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "app": "universal-os",
-  "version": "1.11.0",
-  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.11.0/Instalar-Universal-OS-1.11.exe",
-  "sha256": "6c630035f717c1789ae1dcf978744a33513273866b9fe0aada6a70600cdc5677",
-  "size": 14878459,
-  "notes": "Duas vias na mesma folha A4, escolha de cliente/escritório mantendo tamanho e posição, linhas mais finas e PAGO preenchendo automaticamente o pagamento restante."
+  "version": "1.12.0",
+  "installer_url": "https://github.com/guicbragadesp/universal-os/releases/download/v1.12.0/Instalar-Universal-OS-1.12.exe",
+  "sha256": "aaa76162ca9fe64320c9ec506b82f66e39b9b3f7d6a06b9bac0670b43f05c09f",
+  "size": 24467012,
+  "notes": "Janela própria sem abas do navegador e senhas novas de 4 a 10 caracteres. Mantém uso em rede, dados existentes, duas vias e pagamento automático."
 }

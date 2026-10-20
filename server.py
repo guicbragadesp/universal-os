@@ -88,8 +88,8 @@ def user_fields(data):
         raise ValueError('Usuário: use 3 a 40 letras sem acento, números, ponto ou traço.')
     name = text_field(data, 'name', 100, True)
     password = text_field(data, 'password', 200, True)
-    if len(password) < 10:
-        raise ValueError('A senha precisa ter pelo menos 10 caracteres.')
+    if not 4 <= len(password) <= 10:
+        raise ValueError('A senha precisa ter de 4 a 10 caracteres.')
     return username, name, password
 
 def cents(value):
@@ -285,8 +285,8 @@ class Handler(BaseHTTPRequestHandler):
                     if not password_ok(text_field(data, 'current', 200), row['password']):
                         return self.send({'error': 'Senha atual incorreta.'}, 400)
                     new = text_field(data, 'password', 200, True)
-                    if len(new) < 10:
-                        raise ValueError('Use pelo menos 10 caracteres.')
+                    if not 4 <= len(new) <= 10:
+                        raise ValueError('Use de 4 a 10 caracteres.')
                     c.execute('UPDATE users SET password=? WHERE id=?', (password_hash(new), user['id']))
                     c.execute('DELETE FROM sessions WHERE user_id=?', (user['id'],))
                     return self.send({'ok': True})
@@ -355,8 +355,8 @@ class Handler(BaseHTTPRequestHandler):
                         c.execute('UPDATE users SET active=? WHERE id=?', (1 if data['active'] is True else 0, uid))
                     if data.get('password'):
                         password = text_field(data, 'password', 200, True)
-                        if len(password) < 10:
-                            raise ValueError('Use pelo menos 10 caracteres.')
+                        if not 4 <= len(password) <= 10:
+                            raise ValueError('Use de 4 a 10 caracteres.')
                         c.execute('UPDATE users SET password=? WHERE id=?', (password_hash(password),uid))
                     c.execute('DELETE FROM sessions WHERE user_id=?', (uid,))
                     return self.send({'ok': True})

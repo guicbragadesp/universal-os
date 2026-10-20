@@ -22,7 +22,7 @@ As OS ficam no principal em `%LOCALAPPDATA%\UniversalOS\data`. Esse banco, senha
 
 ## Executar o código
 
-Python 3.10 ou superior. Sem dependências externas para o servidor:
+Python 3.10 ou superior. O servidor não tem dependências externas; a janela desktop requer `pip install -r requirements-desktop.txt`:
 
 ```text
 python desktop.py
@@ -35,7 +35,7 @@ Nos clientes: `python desktop.py --cliente`. Para servidor sem janela: `python s
 Instale PyInstaller em um ambiente de desenvolvimento Windows e execute, na raiz:
 
 ```text
-python -m PyInstaller --onefile --windowed --name Universal-OS --icon public/icon.ico --add-data "public;public" desktop.py
+python -m PyInstaller --onefile --windowed --name Universal-OS --icon public/icon.ico --collect-all webview --collect-all pythonnet --collect-all clr_loader --add-data "public;public" desktop.py
 ```
 
 Compile `installer.iss` com Inno Setup. O arquivo está configurado para esta versão. Para uma nova versão, atualize `updater.VERSION`, os nomes versionados do instalador/executável e os processos anteriores a encerrar. Publique o instalador nos Releases antes de atualizar `latest.json` com sua versão, URL, tamanho exato e SHA-256. Nunca inclua dados de produção no pacote.
@@ -53,3 +53,11 @@ Papel A4, escala 100%, cabeçalhos e rodapés do navegador desativados. O nome s
 Impressão em duas vias na mesma folha A4: cliente em cima, escritório embaixo. Escolha ambas, só cliente ou só escritório. Cada via mantém 135 mm de altura e a mesma posição; a outra metade fica em branco quando não selecionada. Textos extensos continuam em outras folhas sem reduzir a fonte ou cortar dados. Linhas finas em cinza.
 
 Marcar PAGO preenche o pagamento até o total da OS, incluindo o restante de pagamentos parciais. Desmarcar remove o carimbo sem apagar o pagamento. O banco continua exigindo quitação para salvar o carimbo.
+
+## Versão 1.12 — janela própria
+
+A interface abre em janela integrada do aplicativo, sem abas ou barra de endereço do Chrome. O controle do principal permanece aberto para atender a rede e oferecer backup e atualização. Os clientes guardam o endereço do principal após a primeira configuração. Cada nova janela usa sessão privada e pede login.
+
+Senhas novas de 4 a 10 caracteres são aceitas no cadastro, troca e redefinição, sem composição obrigatória. Senhas antigas, inclusive mais longas, continuam aceitas no login.
+
+O instalador verifica o Microsoft WebView2 Runtime e instala o bootstrapper oficial somente se necessário. Nesse caso precisa de internet. Para recompilar, execute `download-webview2.ps1` antes de compilar `installer.iss`. O bootstrapper é conferido pela assinatura Microsoft e não é publicado no código-fonte; ele faz parte do instalador. Não altera registros ou senhas existentes.
